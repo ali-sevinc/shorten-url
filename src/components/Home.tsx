@@ -1,30 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+
 import { shortenUrl } from "@/lib/actions";
 import { FormStateType } from "@/lib/types";
-import { useFormState } from "react-dom";
-import Modal from "./Modal";
+
+import Result from "./Result";
 
 export default function Home() {
   const [formState, formAction] = useFormState(shortenUrl, {} as FormStateType);
-  console.log(formState);
+  const [showModal, setShowModal] = useState(false);
+  const [shortened, setShortened] = useState<string>("http://localhost:3000/");
 
   const isSuccess = Array.isArray(formState) && formState[0].slug;
-  let showModal = isSuccess ? true : false;
 
-  function copyShortenUrl() {
-    if (!isSuccess) return;
-    navigator.clipboard.writeText(
-      `http://localhost:3000/${formState[0]?.slug}`
-    );
-  }
+  useEffect(
+    function () {
+      if (isSuccess) {
+        setShowModal(true);
+      }
+    },
+    [isSuccess]
+  );
 
   return (
     <>
       <div className="bg-blue-50 min-h-screen grid items-center">
-        <div className="max-w-6xl mx-auto bg-blue-500 p-4 flex flex-col gap-8 pt-8 rounded-xl">
-          <h1 className=" text-blue-50 font-semibold text-4xl">
-            Welcome the SURL
+        <div className="max-w-xl mx-auto w-full bg-blue-500 p-4 flex flex-col gap-8  rounded-xl">
+          <h1 className=" text-blue-50 font-semibold text-center text-4xl">
+            SURL
           </h1>
           <form action={formAction} className="flex flex-col gap-5 text-lg">
             <div className="flex flex-col">
@@ -55,29 +60,44 @@ export default function Home() {
                 type="text"
                 id="shorten"
                 name="shortUrl"
+                onChange={(e) =>
+                  setShortened("http://localhost:3000/" + e.target.value)
+                }
               />
             </div>
-            <div className="text-center">
-              <button className="border-2 bg-blue-50 rounded px-4 py-2 hover:bg-blue-200 duration-200">
-                Submit
-              </button>
+            <div className="flex flex-col">
+              <p className="text-blue-50">Prewiev</p>
+              <b className="truncate bg-blue-50 px-2 py-1">{shortened}</b>
             </div>
+            <FormButton />
           </form>
           {!Array.isArray(formState) && formState?.createError && (
             <p>{formState?.createError}</p>
           )}
         </div>
       </div>
-      {isSuccess && (
-        <Modal open={showModal} onClose={() => (showModal = false)}>
-          <div className="flex gap-4">
-            <p>
-              new url: <b>http://localhost:3000/{formState[0]?.slug}</b>
-            </p>
-            <button onClick={copyShortenUrl}>Copy</button>
-          </div>
-        </Modal>
+      {isSuccess && showModal && (
+        <Result
+          isSuccess={isSuccess}
+          onClose={() => setShowModal(false)}
+          showModal={showModal}
+          slug={formState[0]?.slug}
+        />
       )}
     </>
+  );
+}
+
+function FormButton() {
+  const { pending } = useFormStatus();
+  return (
+    <div className="text-center">
+      <button
+        disabled={pending}
+        className="border-2 border-blue-200 bg-blue-50 rounded px-4 py-2 hover:bg-blue-200 duration-200"
+      >
+        {pending ? "Submitting..." : "Submit"}
+      </button>
+    </div>
   );
 }

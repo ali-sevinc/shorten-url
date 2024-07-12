@@ -25,8 +25,18 @@ export default function Modal({
   );
 
   return (
-    <dialog ref={ref} onClose={onClose} className="backdrop:bg-stone-600/20">
+    <dialog
+      ref={ref}
+      onClose={onClose}
+      className="backdrop:bg-stone-600/70 px-4 py-2 rounded-xl bg-blue-500 relative"
+    >
       {children}
+      <button
+        onClick={() => onClose()}
+        className="absolute right-4 top-1 text-blue-50 hover:text-red-100 text-lg font-bold"
+      >
+        x
+      </button>
     </dialog>
   );
 }
