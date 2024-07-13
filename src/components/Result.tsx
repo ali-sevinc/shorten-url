@@ -37,7 +37,7 @@ export default function Result({
         <div className="flex items-center">
           <p className="flex items-center">
             <b className="bg-blue-50 text-blue-700 p-1 rounded-l-xl">
-              http://localhost:3000/{slug}
+              https://surl-ali.vercel.app/{slug}
             </b>
             <button
               className="bg-blue-50 hover:bg-blue-100 text-blue-700 p-2 text-xl rounded-r-xl border-l-2"
