@@ -35,7 +35,7 @@ export async function shortenUrl(initialState: FormStateType, form: FormData) {
     state.urlError = "Invalid URL. Please provide a correct URL.";
   }
 
-  if (existedShortUrl?.length > 0) {
+  if (existedShortUrl?.length > 0 || !slugified.length) {
     state.existedError = `Could not create shoten url with ${shortUrl}`;
   }
 
