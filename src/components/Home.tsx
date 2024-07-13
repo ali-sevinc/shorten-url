@@ -11,7 +11,9 @@ import Result from "./Result";
 export default function Home() {
   const [formState, formAction] = useFormState(shortenUrl, {} as FormStateType);
   const [showModal, setShowModal] = useState(false);
-  const [shortened, setShortened] = useState<string>("http://localhost:3000/");
+  const [shortened, setShortened] = useState<string>(
+    "https://surl-ali.vercel.app/"
+  );
 
   const isSuccess = Array.isArray(formState) && formState[0].slug;
 
@@ -61,7 +63,7 @@ export default function Home() {
                 id="shorten"
                 name="shortUrl"
                 onChange={(e) =>
-                  setShortened("http://localhost:3000/" + e.target.value)
+                  setShortened("https://surl-ali.vercel.app/" + e.target.value)
                 }
               />
             </div>

@@ -19,7 +19,7 @@ export default function Result({
   const [isCoppied, setIsCoppied] = useState(false);
   function copyShortenUrl() {
     if (!isSuccess) return;
-    navigator.clipboard.writeText(`http://localhost:3000/${slug}`);
+    navigator.clipboard.writeText(`https://surl-ali.vercel.app/${slug}`);
     setIsCoppied(true);
 
     setTimeout(() => setIsCoppied(false), 1500);
@@ -27,7 +27,12 @@ export default function Result({
 
   return (
     <Modal open={showModal} onClose={onClose}>
-      <div className="flex flex-col gap-4 p-8 text-blue-50 text-lg">
+      <div className="flex flex-col gap-4 p-8 text-blue-50 text-lg relative">
+        {isCoppied && (
+          <p className="absolute top-0 left-[calc(50%-3rem)] w-[6rem] text-sm text-green-200 text-center">
+            Coppied
+          </p>
+        )}
         <h2 className="text-2xl font-semibold text-center">Shortened URL</h2>
         <div className="flex items-center">
           <p className="flex items-center">
