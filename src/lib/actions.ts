@@ -25,17 +25,27 @@ export async function shortenUrl(initialState: FormStateType, form: FormData) {
 
   const slugified = slugify(shortUrl);
 
-  const { data: existedShortUrl } = await getShortUrl(slugified);
   let state: {
     existedError?: string;
     urlError?: string;
     createError?: string;
   } = {};
+
   if (!longUrl?.trim().length || !urlRegex.test(longUrl)) {
     state.urlError = "Invalid URL. Please provide a correct URL.";
   }
 
-  if (existedShortUrl?.length > 0 || !slugified.length) {
+  if (!slugified.length) {
+    state.existedError = `Could not create shoten url with ${shortUrl}`;
+  }
+
+  if (Object.keys(state).length > 0) {
+    return state;
+  }
+
+  const { data: existedShortUrl } = await getShortUrl(slugified);
+
+  if (existedShortUrl?.length > 0) {
     state.existedError = `Could not create shoten url with ${shortUrl}`;
   }
 

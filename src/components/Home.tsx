@@ -7,6 +7,7 @@ import { shortenUrl } from "@/lib/actions";
 import { FormStateType } from "@/lib/types";
 
 import Result from "./Result";
+import slugify from "slugify";
 
 export default function Home() {
   const [formState, formAction] = useFormState(shortenUrl, {} as FormStateType);
@@ -63,7 +64,9 @@ export default function Home() {
                 id="shorten"
                 name="shortUrl"
                 onChange={(e) =>
-                  setShortened("https://surl-ali.vercel.app/" + e.target.value)
+                  setShortened(
+                    "https://surl-ali.vercel.app/" + slugify(e.target.value)
+                  )
                 }
               />
             </div>
